@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=WindSong:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/view.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        let userrole = ""; // Variable to store user role
+        
+        window.onload = async () => {
+            try {
+                // Fetch user role
+                const userResponse = await fetch("http://127.0.0.1:8000/viewuser", {
+                    method: "GET",
+                    credentials: "include"
+                });
+                const userData = await userResponse.json();
+                userrole = userData.user;
+
+                // Show 'Add Book' button if user is an admin
+                if (userrole === "admin") {
+                    document.getElementById("admin").style.display = "inline-block";
+                }
+
+                // Fetch books to display
+                const bookResponse = await fetch("http://127.0.0.1:8000/viewallbook", {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                const books = await bookResponse.json();
+                console.log(books)
+                // Display books
+                const container = document.getElementById("cards");
+                container.innerHTML = '';  // Clear existing content
+                if (books.length > 0) {
+                    books.forEach(book=> {
+                        const bookdiv = document.createElement("div");
+                        bookdiv.style.backgroundColor = '#e2d8d9';
+                        bookdiv.style.borderRadius = '10px';
+                        bookdiv.style.width = '300px';
+                        bookdiv.style.height = '350px';
+                        bookdiv.style.marginLeft = '80px';
+                        bookdiv.style.marginBottom = '50px';
+
+                        const bookname = document.createElement("p");
+                        bookname.style.color = "white";
+                        bookname.style.fontSize = '30px';
+                        bookname.style.textAlign = 'center';
+                        bookname.innerHTML = book.bookname;
+
+                        const image = document.createElement("img");
+                        image.src = "/images/b5.jpg";
+                        image.style.height = '200px';
+                        image.style.width = '150px';
+                        image.style.marginLeft = '80px';
+
+                        const description = document.createElement("p");
+                        description.innerHTML = book.description ;
+                        description.style.fontSize = '30px';
+
+                        const more = document.createElement("input");
+                        more.onclick = () => handleMore(book[0]);
+                        more.type = 'submit';
+                        more.value = 'Add to Cart';
+                        more.style.border = '2px solid white';
+                        more.style.backgroundColor = 'white';
+                        more.style.color = 'purple';
+                        more.style.borderRadius = '6px';
+                        more.style.marginLeft = '100px';
+
+                        bookdiv.appendChild(bookname);
+                        bookdiv.appendChild(image);
+                        bookdiv.appendChild(description);
+                        bookdiv.appendChild(more);
+                        container.appendChild(bookdiv);
+                    });
+                } else {
+                    alert("No books added.");
+                }
+            } catch (error) {
+                console.log("Error:", error);
+            }
+        };
+
+        function handleMore(bookname) {
+            console.log(bookname);
+            localStorage.setItem('book', bookname);
+            window.location.href = './learnmore.html';
+        }
+        async function logout(){
+
+const response = await fetch("http://127.0.0.1:8000/logout",{
+  method:"POST",
+  credentials:"include"
+});
+const data = await response.json();
+if(data==200){
+    alert("your are logout successfully")
+  window.location.href = "login.html";
+}
+}
+    </script>
+</head>
+<body class="bg-[url('/lib.jpg')] bg-no-repeat bg-cover">
+    <div class="flex">
+        <div class="flex"> 
+            <p class="text-white font-extrabold font-mono text-[150px]">Liara</p>
+            <p class="text-white font-extrabold font-mono mt-24 text-2xl ml-8">Find Joy in Reading</p>
+        </div>
+        <div class="text-white font-extrabold font-serif text-4xl ml-[300px]">
+            <nav class="mt-20">
+                <a class="ml-12" href="home.html">Home</a>
+                <a class="ml-12" href="add.html" id="admin" style="display: none;">Add Book</a>
+                <a class="ml-12" href="view.html">View Book</a>
+                <a class="ml-12" onclick="logout()" href="login.html">Logout</a>
+            </nav>
+        </div>
+    </div>
+    <p class="text-white text-center text-4xl py-8 font-extrabold">View Book</p>
+    <div id="cards" style="display: flex;"></div>
+</body>
+</html>

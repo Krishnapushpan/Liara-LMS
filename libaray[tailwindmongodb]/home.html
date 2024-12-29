@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=WindSong:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/home.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.onload=async()=>{
+        console.log("hi");
+        try{
+        const response = await fetch("http://127.0.0.1:8000/viewuser",{
+          method:"GET",
+          credentials:"include"
+        });
+        const data = await response.json();
+        if(data.user=="admin"){
+          document.getElementById("admin").style.display="inline-block";
+        }
+      }
+      catch(error){
+        console.log(error)
+      }
+      }
+      function searchbook() {
+        // Get the entered candidate ID
+        const bookname = document.getElementById("bookname").value.trim();
+        console.log("Entered book nmae:", bookname);
+
+        if (bookname) {
+            // Store candidate ID in localStorage and navigate to view certificate page
+            localStorage.setItem('searchbookname', bookname);
+            console.log("book namesaved to localStorage:", bookname);
+            window.location.href = "viewcertificate.html";
+        } else {
+            alert("Please enter a candidate ID to search.");
+        }
+    }
+async function logout(){
+
+        const response = await fetch("http://127.0.0.1:8000/logout",{
+          method:"POST",
+          credentials:"include"
+        });
+        const data = await response.json();
+        if(data==200){
+            alert("your are logout successfully")
+          window.location.href = "login.html";
+      }
+      }
+
+    </script>
+</head>
+<body  class="bg-[url('/lib.jpg')] bg-no-repeat bg-cover">
+    <div class="flex">
+            <div class="flex"> 
+                <p class="text-white font-extrabold font-mono text-[150px]">Liara</p>
+               <p class="text-white font-extrabold font-mono mt-24 text-2xl ml-8"> Find Joy in Reading </p>
+            </div>
+
+            <div class="text-white font-extrabold font-serif text-4xl ml-[250px]">
+                <nav class="mt-20" >
+                    <a class="ml-10" href="home.html">Home</a>
+                    <a class="ml-10 " id="admin" style="display: none;" href="add.html">Add Book</a>
+                    <a class="ml-10"  href="view.html">View Book</a>
+                    <a class="ml-10" onclick="logout()" href="login.html">Logout</a>
+                </nav>
+            </div>
+    </div>
+    <div class="ml-[550px] mt-20">
+        <input type="text"   class="bg-white h-12 w-[750px] hover:bg-amber-700/20 hover:placeholder:text-white  border border-slate-300 rounded-full" placeholder="Search here....">
+        <input class="border rounded-full bg-[#cba8ab]  w-24 h-[50px] text-slate-100 ml-4" onclick="searchbook()"type="button" name="" value="search">
+    </div>
+    <div ><p class="text-white mt-8 text-4xl font-serif font-extrabold text-center" >Take time to make your soul happy</p></div>
+</body>
+</html>

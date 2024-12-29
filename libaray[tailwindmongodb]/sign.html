@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=WindSong:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/sign.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script> 
+        async function handlesubmit(event){
+           event.preventDefault();
+        //    const firstname =document.getElementById("firstname").value;
+           const username = document.getElementById("username").value;
+           const emailid = document.getElementById("emailid").value;
+           const password = document.getElementById("password").value;
+           const userrole = document.getElementById("userrole").value;
+     
+        //    console.log(firstname,lastname,username,password,userrole);
+   
+           const response = await fetch("http://127.0.0.1:8000/signup",{
+               method:"POST",
+               headers:{
+                   'Content-Type':'application/json'
+               },
+               body:JSON.stringify(
+               {
+                 
+              
+                   username:username,
+                   emailid:emailid,
+                   password:password,
+                   role:userrole
+               })
+           });
+           console.log(response.status);
+           if(response.status == 201){
+           window.location.href="login.html";
+           console.log("sign up successfully")
+           alert("sign up successfully")
+           }
+           else if(response.status == 400){
+            console.log("username already exist")
+               alert("username already exist")
+              
+           }
+           else{
+               alert("server error") 
+               console.log("server error")
+           }
+       }
+      </script>
+</head>
+<body   class="bg-[url('/lib.jpg')] bg-no-repeat bg-cover">
+    <div class="flex">
+            <div class="flex"> 
+                <p class="text-white font-extrabold font-mono text-[150px]">Liara</p>
+               <p class="text-white font-extrabold font-mono mt-24 text-2xl ml-8"> Find Joy in Reading </p>
+            </div>
+
+            <!-- <div class="text-white font-extrabold font-serif text-4xl ml-[300px]">
+                <nav class="mt-20" >
+                    <a class="ml-12" href="home.html">Home</a>
+                    <a class="ml-12"  href="add.html">Add Book</a>
+                    <a class="ml-12"  href="view.html">View Book</a>
+                    <a class="ml-12"  href="login.html">Login</a>
+                </nav>
+            </div> -->
+    </div>
+    <form action="" onsubmit="handlesubmit(event)">
+    <div class="bg-amber-800/30 h-[590px] w-[590px] rounded-2xl ml-[600px] leading-loose">
+        <p class="text-white text-center text-4xl   py-8 font-extrabold">Sign Up</p>
+        <label class="text-white text-center text-2xl ml-12 py-8 font-extrabold" for="">Username :</label>
+        <input  class="bg-white  h-12 w-[500px] ml-12 border border-slate-300 rounded-lg hover:bg-amber-700/40 hover:placeholder:text-white" type="text" id="username" placeholder="Enter your username">
+        <br>
+        <label class="text-white text-center text-2xl ml-12 py-8 font-extrabold" for="">Email&nbsp; Id  :</label>
+        <input  class="bg-white  h-12 w-[500px] ml-12 border border-slate-300 rounded-lg hover:bg-amber-700/40 hover:placeholder:text-white" type="email" id="emailid" name=""  placeholder="Enter your Email id">
+        <br>
+        <label class="text-white text-center text-2xl ml-12 py-8 font-extrabold" for="">Password :</label>
+        <input  class="bg-white  h-12 w-[500px] ml-12 border border-slate-300 rounded-lg hover:bg-amber-700/40 hover:placeholder:text-white" type="password" id="password" placeholder="Enter your Password">
+        <br>
+        <label class="text-white text-center text-2xl ml-12 py-8 font-extrabold" for="role">Role : </label>
+                    <br>
+                    <select class="h-12 w-[500px] ml-12 border border-slate-300 rounded-lg" name="UserRole" id="userrole">
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
+                    <br>
+        <button  class="h-12 ml-12 mt-8 text-white text-2xl font-extrabold w-[500px] rounded-lg bg-amber-700 hover:opacity-50" type="submit">Sign Up</button>
+        <p class="mt-8 ml-20 text-white text-2xl font-extrabold">Already have an account? <a class="hover:text-4xl"  href="login.html">Login</a></p>
+    </div>
+</form>
+</body>
+</html>

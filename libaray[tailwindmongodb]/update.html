@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=WindSong:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/add.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+       window.onload=async()=>{
+        const courseid=localStorage.getItem('course');
+            const response=await fetch(`http://127.0.0.1:8000/getcourseq?courseid=${courseid}`,
+            {method:"GET",
+            credentials:"include",});
+            console.log(response);
+              data=await response.json();
+              if(response.status!=404){
+              console.log(data);
+              document.getElementById("bookname").value=data.bookname;
+              document.getElementById("authorname").value=data.authorname;
+              document.getElementById("description").value=data.description;
+              document.getElementById("price").value=data.price;
+            
+              }
+            }
+            async function handleupdate(event) {
+            event.preventDefault();
+
+            const bookname = document.getElementById('bookname').value;
+            const authorname = document.getElementById('authorname').value;
+            const newdescription = document.getElementById('description').value;
+            const newprice = document.getElementById('price').value;
+
+            // try {
+                const response = await fetch("http://127.0.0.1:8000/putupdate", {
+                    method: "PUT",
+                    credentials: "include",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        bookname: bookname,
+                        authorname: authorname,
+                        newdescription: newdescription,
+                        newprice: newprice
+                    })
+                });
+
+            console.log(response);
+            console.log(response.status);
+            if(response.status==200){
+                window.location.href="home.html";
+            }
+                // setting localstorage
+                // Get the existing courses from localStorage or initialize an empty array if not found
+                let books = JSON.parse(localStorage.getItem('books')) || [];
+            
+            // Create a new course object
+            const newbook = {
+                        bookname: bookname,
+                        authorname: authorname,
+                        newdescription: newdescription,
+                        newprice: newprice
+            };
+            
+             const existingIndex = books.findIndex(book => book.bookname === bookname);
+                if (existingIndex !== -1) {
+                    courses[existingIndex] = newbook;
+                } else {
+                    books.push(newbook);
+                }
+            // Save the updated array back to localStorage
+            localStorage.setItem('books', JSON.stringify(books));
+            console.log('successfully book added');
+            alert(' book updated ');
+            }
+   </script>
+  
+</head>
+<body class="bg-[url('/lib.jpg')] bg-no-repeat bg-cover">
+    <div class="flex">
+            <div class="flex"> 
+                <p class="text-white font-extrabold font-mono text-[150px]">Liara</p>
+               <p class="text-white font-extrabold font-mono mt-24 text-2xl ml-8"> Find Joy in Reading </p>
+            </div>
+
+            <div class="text-white font-extrabold font-serif text-4xl ml-[300px]">
+                <nav class="mt-20" >
+                    <a class="ml-12" href="home.html">Home</a>
+                    <a class="ml-12"  href="add.html" id="admin" style="display: none;" >Add Book</a>
+                    <a class="ml-12"  href="view.html">View Book</a>
+                    <a class="ml-12"  href="login.html">Login</a>
+                </nav>
+            </div>
+    </div>
+    <form action="" onsubmit="handlesubmit(event)">
+    <div class="bg-amber-800/30 h-[690px] w-[590px] rounded-2xl ml-[600px] leading-loose">
+        <p class="text-white text-center text-4xl   py-8 font-extrabold">update Book</p>
+        <div class="sub">
+            <label class="text-white text-center text-2xl ml-12 py-8 font-extrabold" for="">Book Name</label>
+            <br>
+            <input class="bg-white  h-12 w-[500px] ml-12 border border-slate-300 rounded-lg hover:bg-amber-700/40 hover:placeholder:text-white" type="text" name="bookname" id="bookname" placeholder="Enter the Book Name">
+            <br>
+            <label class="text-white text-center text-2xl ml-12 py-8 font-extrabold" for="">Author Name</label>
+            <br>
+            <input class="bg-white h-12 w-[500px] ml-12 border border-slate-300 rounded-lg hover:bg-amber-700/40 hover:placeholder:text-white" id="authorname" type="text" placeholder="Enter the Name">
+            <br>
+            <label class="text-white text-center text-2xl ml-12 py-8 font-extrabold" for="">Description</label>
+            <br>
+            <textarea name="" class="bg-white h-26 w-[500px] ml-12  border border-slate-300 rounded-lg hover:bg-amber-700/40 hover:placeholder:text-white" id="description" rows="6" placeholder="Enter the Description"></textarea>
+            <br>
+            <label class="text-white text-center text-2xl ml-12 py-8 font-extrabold" for="">Price</label>
+            <br>
+            <input class="bg-white h-12 w-[500px] ml-12 border border-slate-300 rounded-lg hover:bg-amber-700/40 hover:placeholder:text-white" type="text" name="" id="price" placeholder="enter price">
+            <br>
+            <br>
+            <input class="h-12 ml-12 text-white text-2xl font-extrabold w-[480px] rounded-lg bg-amber-700 hover:opacity-50" type="submit" value="Add Book">
+        
+        </div>
+    </div>
+</form>
+</body>
+</html>

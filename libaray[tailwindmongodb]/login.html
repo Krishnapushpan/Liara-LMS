@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=WindSong:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/login.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        async function handlesubmit(event){
+        event.preventDefault();
+        const username=document.getElementById('username').value;
+        const password=document.getElementById('password').value;
+        console.log(username);
+        const response=await fetch("http://127.0.0.1:8000/login",{
+            method:"POST",
+            credentials:'include',
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+                username:username,
+                password:password
+            })
+        })
+        console.log(response);
+        // console.log(response.status);
+        if(response.status==200){
+            window.location.href="home.html";
+            console.log('successfully logged in');
+            alert('successfully logged in');
+           
+        }
+        else if(response.status==404){
+            console.log(' user not found');
+            alert('user not found');
+           
+        }
+        else{
+            console.log('server error');
+            alert('server error');
+            
+        }
+     }
+    </script>
+    </script>
+</head>
+<body   class="bg-[url('/lib.jpg')] bg-no-repeat bg-cover">
+    <div class="flex">
+            <div class="flex"> 
+                <p class="text-white font-extrabold font-mono text-[150px]">Liara</p>
+               <p class="text-white font-extrabold font-mono mt-24 text-2xl ml-8"> Find Joy in Reading </p>
+            </div>
+
+            <!-- <div class="text-white font-extrabold font-serif text-4xl ml-[300px]">
+                <nav class="mt-20" >
+                    <a class="ml-12" href="home.html">Home</a>
+                    <a class="ml-12"  href="add.html">Add Book</a>
+                    <a class="ml-12"  href="view.html">View Book</a>
+                    <a class="ml-12"  href="login.html">Login</a>
+                </nav>
+            </div> -->
+    </div>
+    </div>
+    <form action="" onsubmit="handlesubmit(event)">
+    <div class="bg-amber-800/30 h-[490px] w-[590px] rounded-2xl ml-[600px] leading-loose">
+        <p class="text-white text-center text-4xl   py-8 font-extrabold">Login</p>
+        <label class="text-white text-center text-2xl ml-12 py-8 font-extrabold" for="">Username :</label>
+      
+        <input class="bg-white  h-12 w-[500px] ml-12 border border-slate-300 rounded-lg hover:bg-amber-700/40 hover:placeholder:text-white" type="text" id="username" placeholder="Enter your username">
+        <br>
+        <label class="text-white text-center text-2xl ml-12 py-8 font-extrabold" for="">Password :</label>
+       
+        <input class="bg-white  h-12 w-[500px] ml-12 border border-slate-300 rounded-lg hover:bg-amber-700/40 hover:placeholder:text-white" id="password" type="password" placeholder="Enter your Password">
+        <br>
+        <button class="h-12 ml-12 mt-8 text-white text-2xl font-extrabold w-[500px] rounded-lg bg-amber-700 hover:opacity-50" type="submit">Login</button>
+        <p class="mt-8 ml-20 text-white text-2xl font-extrabold">Don't have an account? <a class="hover:text-4xl" href="sign.html">  Sign Up</a></p>
+    </div>
+</form>
+</body>
+</html>
